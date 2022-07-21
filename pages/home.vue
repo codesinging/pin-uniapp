@@ -1,20 +1,12 @@
 <template>
 	<view>
-		home
+		home: {{ auth.token }}
 	</view>
 </template>
 
-<script>
-	export default {
-		data() {
-			return {
-				
-			}
-		},
-		methods: {
-			
-		}
-	}
+<script setup>
+	import useAuth from '@/store/auth.js'
+	const auth = useAuth()
 </script>
 
 <style>

@@ -1,20 +1,13 @@
 <template>
 	<view>
-		
+		{{ message }}
 	</view>
 </template>
 
-<script>
-	export default {
-		data() {
-			return {
-				
-			}
-		},
-		methods: {
-			
-		}
-	}
+<script setup>
+	import {ref} from 'vue'
+	
+	const message = ref('hello')
 </script>
 
 <style>

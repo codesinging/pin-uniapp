@@ -1,1 +1,1 @@
-<view></view>
+<view> mine: {{a}} status: {{b}} <button bindtap="{{c}}">login</button><button bindtap="{{d}}">logout</button></view>

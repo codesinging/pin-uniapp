@@ -9,9 +9,15 @@ const set = (key, value) => {
 
 const get = (key, def = null) => uni.getStorageSync(prefixedKey(key)) || def
 
+const remove = key => {
+	uni.removeStorageSync(prefixedKey(key))
+	return null
+}
+
 export default {
 	prefix,
 	prefixedKey,
 	set,
 	get,
+	remove,
 }
