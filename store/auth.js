@@ -26,7 +26,7 @@ const useAuth = defineStore('auth', {
 		clear() {
 			this.user = persist.remove('user')
 			this.token = persist.remove('token')
-		}
+		},
 	},
 })
 

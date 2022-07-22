@@ -4,6 +4,8 @@
 		
 		<button @click="load">load</button>
 		<button @click="stop">stop</button>
+		
+		<navigator url="/packages/default/pages/auth/login?id=2">Login</navigator>
 	</view>
 </template>
 
@@ -14,7 +16,14 @@
 	const load = () => status.set('loading')
 	const stop = () => status.unset('loading')
 	
+	import {page} from '@/common/utils/route.js'
 	
+	import {onShow} from '@dcloudio/uni-app'
+	
+	onShow(() => {
+		console.log(getCurrentPages());
+		console.log(page());
+	})
 </script>
 
 <style>

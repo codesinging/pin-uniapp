@@ -1,12 +1,14 @@
 "use strict";
 var common_vendor = require("../common/vendor.js");
+var store_auth = require("../store/auth.js");
+require("../common/utils/persist.js");
 const _sfc_main = {
   __name: "cart",
   setup(__props) {
-    const message = common_vendor.ref("hello");
+    store_auth.useAuth();
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.t(message.value)
+        a: common_vendor.t(_ctx.message)
       };
     };
   }

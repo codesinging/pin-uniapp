@@ -1,0 +1,1 @@
+<view> status: {{a}} <button bindtap="{{b}}">load</button><button bindtap="{{c}}">stop</button><navigator url="/packages/default/pages/auth/login?id=2">Login</navigator></view>
