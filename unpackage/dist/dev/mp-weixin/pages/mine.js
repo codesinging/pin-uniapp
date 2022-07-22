@@ -1,19 +1,17 @@
 "use strict";
 var common_vendor = require("../common/vendor.js");
-var store_auth = require("../store/auth.js");
-require("../common/utils/persist.js");
+var store_status = require("../store/status.js");
 const _sfc_main = {
   __name: "mine",
   setup(__props) {
-    const auth = store_auth.useAuth();
-    const login = () => auth.setToken("token_value");
-    const logout = () => auth.clear();
+    const status = store_status.useStatus();
+    const load = () => status.set("loading");
+    const stop = () => status.unset("loading");
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.t(common_vendor.unref(auth).token),
-        b: common_vendor.t(common_vendor.unref(auth).isLogin),
-        c: common_vendor.o(login),
-        d: common_vendor.o(logout)
+        a: common_vendor.t(common_vendor.unref(status).status.loading),
+        b: common_vendor.o(load),
+        c: common_vendor.o(stop)
       };
     };
   }

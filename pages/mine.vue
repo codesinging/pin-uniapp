@@ -1,18 +1,20 @@
 <template>
 	<view>
-		mine: {{ auth.token }} status: {{ auth.isLogin }}
+		status: {{ status.status.loading }}
 		
-		<button @click="login">login</button>
-		<button @click="logout">logout</button>
+		<button @click="load">load</button>
+		<button @click="stop">stop</button>
 	</view>
 </template>
 
 <script setup>
-	import useAuth from '@/store/auth.js'
-	const auth = useAuth()
+	import useStatus from '@/store/status.js'
+	const status = useStatus()
+
+	const load = () => status.set('loading')
+	const stop = () => status.unset('loading')
 	
-	const login = () => auth.setToken('token_value')
-	const logout = () => auth.clear()
+	
 </script>
 
 <style>
