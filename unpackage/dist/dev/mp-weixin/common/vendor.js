@@ -3130,16 +3130,16 @@ function injectHook(type, hook, target = currentInstance, prepend = false) {
     warn$1(`${apiName} is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup().`);
   }
 }
-const createHook$1 = (lifecycle) => (hook, target = currentInstance) => (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, hook, target);
-const onBeforeMount = createHook$1("bm");
-const onMounted = createHook$1("m");
-const onBeforeUpdate = createHook$1("bu");
-const onUpdated = createHook$1("u");
-const onBeforeUnmount = createHook$1("bum");
-const onUnmounted = createHook$1("um");
-const onServerPrefetch = createHook$1("sp");
-const onRenderTriggered = createHook$1("rtg");
-const onRenderTracked = createHook$1("rtc");
+const createHook = (lifecycle) => (hook, target = currentInstance) => (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, hook, target);
+const onBeforeMount = createHook("bm");
+const onMounted = createHook("m");
+const onBeforeUpdate = createHook("bu");
+const onUpdated = createHook("u");
+const onBeforeUnmount = createHook("bum");
+const onUnmounted = createHook("um");
+const onServerPrefetch = createHook("sp");
+const onRenderTriggered = createHook("rtg");
+const onRenderTracked = createHook("rtc");
 function onErrorCaptured(hook, target = currentInstance) {
   injectHook("ec", hook, target);
 }
@@ -5085,91 +5085,6 @@ function getCreateApp() {
     return my[method];
   }
 }
-function vOn(value, key) {
-  const instance = getCurrentInstance();
-  const ctx = instance.ctx;
-  const extraKey = typeof key !== "undefined" && (ctx.$mpPlatform === "mp-weixin" || ctx.$mpPlatform === "mp-qq") && (isString(key) || typeof key === "number") ? "_" + key : "";
-  const name = "e" + instance.$ei++ + extraKey;
-  const mpInstance = ctx.$scope;
-  if (!value) {
-    delete mpInstance[name];
-    return name;
-  }
-  const existingInvoker = mpInstance[name];
-  if (existingInvoker) {
-    existingInvoker.value = value;
-  } else {
-    mpInstance[name] = createInvoker(value, instance);
-  }
-  return name;
-}
-function createInvoker(initialValue, instance) {
-  const invoker = (e) => {
-    patchMPEvent(e);
-    let args = [e];
-    if (e.detail && e.detail.__args__) {
-      args = e.detail.__args__;
-    }
-    const eventValue = invoker.value;
-    const invoke = () => callWithAsyncErrorHandling(patchStopImmediatePropagation(e, eventValue), instance, 5, args);
-    const eventTarget = e.target;
-    const eventSync = eventTarget ? eventTarget.dataset ? eventTarget.dataset.eventsync === "true" : false : false;
-    if (bubbles.includes(e.type) && !eventSync) {
-      setTimeout(invoke);
-    } else {
-      const res = invoke();
-      if (e.type === "input" && (isArray(res) || isPromise(res))) {
-        return;
-      }
-      return res;
-    }
-  };
-  invoker.value = initialValue;
-  return invoker;
-}
-const bubbles = [
-  "tap",
-  "longpress",
-  "longtap",
-  "transitionend",
-  "animationstart",
-  "animationiteration",
-  "animationend",
-  "touchforcechange"
-];
-function patchMPEvent(event) {
-  if (event.type && event.target) {
-    event.preventDefault = NOOP;
-    event.stopPropagation = NOOP;
-    event.stopImmediatePropagation = NOOP;
-    if (!hasOwn(event, "detail")) {
-      event.detail = {};
-    }
-    if (hasOwn(event, "markerId")) {
-      event.detail = typeof event.detail === "object" ? event.detail : {};
-      event.detail.markerId = event.markerId;
-    }
-    if (isPlainObject$1(event.detail) && hasOwn(event.detail, "checked") && !hasOwn(event.detail, "value")) {
-      event.detail.value = event.detail.checked;
-    }
-    if (isPlainObject$1(event.detail)) {
-      event.target = extend({}, event.target, event.detail);
-    }
-  }
-}
-function patchStopImmediatePropagation(e, value) {
-  if (isArray(value)) {
-    const originalStop = e.stopImmediatePropagation;
-    e.stopImmediatePropagation = () => {
-      originalStop && originalStop.call(e);
-      e._stopped = true;
-    };
-    return value.map((fn) => (e2) => !e2._stopped && fn(e2));
-  } else {
-    return value;
-  }
-}
-const o = (value, key) => vOn(value, key);
 const t = (val) => toDisplayString(val);
 function createApp$1(rootComponent, rootProps = null) {
   rootComponent && (rootComponent.mpType = "app");
@@ -5940,8 +5855,8 @@ let activePinia;
 const setActivePinia = (pinia) => activePinia = pinia;
 const getActivePinia = () => getCurrentInstance() && inject(piniaSymbol) || activePinia;
 const piniaSymbol = Symbol("pinia");
-function isPlainObject(o2) {
-  return o2 && typeof o2 === "object" && Object.prototype.toString.call(o2) === "[object Object]" && typeof o2.toJSON !== "function";
+function isPlainObject(o) {
+  return o && typeof o === "object" && Object.prototype.toString.call(o) === "[object Object]" && typeof o.toJSON !== "function";
 }
 var MutationType;
 (function(MutationType2) {
@@ -6118,8 +6033,8 @@ function shouldHydrate(obj) {
   return !isPlainObject(obj) || !obj.hasOwnProperty(skipHydrateSymbol);
 }
 const { assign } = Object;
-function isComputed(o2) {
-  return !!(isRef(o2) && o2.effect);
+function isComputed(o) {
+  return !!(isRef(o) && o.effect);
 }
 function createOptionsStore(id, options, pinia, hot) {
   const { state, actions, getters } = options;
@@ -6642,17 +6557,11 @@ var Pinia = /* @__PURE__ */ Object.freeze({
   skipHydrate,
   storeToRefs
 });
-const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
-  !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
-};
-const onShow = /* @__PURE__ */ createHook(ON_SHOW);
 exports.Pinia = Pinia;
 exports._export_sfc = _export_sfc;
 exports.createPinia = createPinia;
 exports.createSSRApp = createSSRApp;
 exports.defineStore = defineStore;
 exports.index = index;
-exports.o = o;
-exports.onShow = onShow;
 exports.t = t;
 exports.unref = unref;

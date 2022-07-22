@@ -28,7 +28,7 @@
 			}
 		},
 		{
-			"path": "packages/default/pages/auth/login",
+			"path": "packages/common/pages/auth/login",
 			"style": {
 				"navigationBarTitleText": "授权登录",
 				"enablePullDownRefresh": false

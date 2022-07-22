@@ -1,7 +1,5 @@
 <template>
-	<view>
-		
-	</view>
+	<view>Login</view>
 </template>
 
 <script setup>
@@ -9,5 +7,4 @@
 </script>
 
 <style>
-
 </style>

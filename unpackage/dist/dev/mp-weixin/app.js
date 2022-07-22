@@ -7,7 +7,7 @@ if (!Math) {
   "./pages/tabs/category.js";
   "./pages/tabs/cart.js";
   "./pages/tabs/mine.js";
-  "./packages/default/pages/auth/login.js";
+  "./packages/common/pages/auth/login.js";
 }
 const _sfc_main = {
   onLaunch: function() {
