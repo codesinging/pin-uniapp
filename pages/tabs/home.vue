@@ -1,6 +1,8 @@
 <template>
 	<view>
-		home: {{ auth.token }}
+		<view class="bg-gradient-to-b from-blue-200 to-blue-600 text-gray-600 h-20 flex items-center justify-center">
+			Hello Tailwind
+		</view>
 	</view>
 </template>
 

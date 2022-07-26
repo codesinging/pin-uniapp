@@ -1,1 +1,0 @@
-<view> status: {{a}} <button bindtap="{{b}}">load</button><button bindtap="{{c}}">stop</button></view>

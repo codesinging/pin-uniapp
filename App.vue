@@ -13,5 +13,5 @@
 </script>
 
 <style>
-	
+	@import '@/common/css/vendor/output.css'
 </style>
